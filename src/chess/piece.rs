@@ -1,7 +1,7 @@
 use std::{fmt, ops};
 use crate::chess::color::Color;
 
-#[derive(Clone)]
+#[derive(Copy, Clone)]
 pub enum Piece {
 
     Pawn = 1,   // 1 or 9
@@ -25,8 +25,8 @@ impl Piece {
         }
     }
 
-    pub fn to_u8(value: Piece) -> u8 {
-        return match value {
+    pub fn to_u8(self) -> u8 {
+        return match self {
             Piece::Pawn => 1_u8,
             Piece::Bishop => 2_u8,
             Piece::Knight => 3_u8,
@@ -56,5 +56,11 @@ impl ops::Add<Piece> for Color {
 
     fn add(self, _rhs: Piece) -> u8 {
         return Piece::to_u8(_rhs) + Color::to_u8(self);
+    }
+}
+
+impl PartialEq for Piece {
+    fn eq(&self, _rhs: &Self) -> bool {
+        return self.to_u8() == _rhs.to_u8()
     }
 }

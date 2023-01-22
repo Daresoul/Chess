@@ -1,4 +1,5 @@
 use std::io::{stdin, stdout, Write};
+use std::vec;
 use array2d::Array2D;
 pub use crate::chess::color::Color;
 pub use crate::chess::game::Game;
@@ -23,9 +24,10 @@ const LOW_3_BITS_MASK: u8 = 0b0000_0111;
 const FOURTH_BIT_BITS_MASK: u8 = 0b0000_1000;
 
 pub fn game_loop() -> () {
-    let mut game = create_board_from_string("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR", 0);
+    // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+    let mut game = create_board_from_string("k7/3Q3R/8/8/8/8/8/K7", 0);
     print_board(game.clone());
-    let available_moves = get_all_available_moves(game.clone());
+    let available_moves = get_all_turn_available_moves(game.clone());
     print_available_moves(available_moves);
 
     loop // TODO: make a game is over function
@@ -44,11 +46,13 @@ pub fn game_loop() -> () {
         let y2 = read_line();
         if y2 == 8 { continue }
 
-        game = move_piece(game.clone(), Position {column: x1, row: y1}, Position { column: x2, row: y2 });
+        game = try_move_piece(game.clone(), Position {column: x1, row: y1}, Position { column: x2, row: y2 });
         print_board(game.clone());
-        let available_moves = get_all_available_moves(game.clone());
+        let available_moves = get_all_turn_available_moves(game.clone());
         print_available_moves(available_moves);
     }
+
+    return ()
 }
 
 fn read_line() -> usize {
@@ -76,7 +80,11 @@ fn read_line() -> usize {
 }
 
 pub fn begin() -> Game {
-    return create_board_from_string("rnbqkbnr/pppppppp/8/3R4/8/8/PPPPPPPP/1NBQKBNR", 0);
+    return Game {
+        board: Array2D::filled_with(0, 8, 8),
+        turn: 0,
+        log: vec![]
+    }
 }
 
 pub fn print_board(game: Game) {
@@ -129,6 +137,65 @@ pub fn print_available_moves(available_moves: Vec<((Position, Piece, Color), (Op
 
     }
     println!("]");
+}
+
+fn is_checkmate(game: Game) -> bool {
+    let mut game_copy = game.clone();
+    let turn = Color::to_opposite(get_turn(game_copy.clone()));
+
+    for ((position, _, piece_color),(_, enemy_position)) in get_all_turn_available_moves(game.clone()) {
+        if piece_color == turn {
+            game_copy = move_piece(game_copy.clone(), turn.clone(), position.clone(), enemy_position.clone());
+
+            let checks = is_check(game_copy.clone());
+
+            let mut same_colored_check = false;
+            for check_color in checks.iter() {
+                if *check_color == turn {
+                    same_colored_check = true;
+                }
+            }
+
+            if !same_colored_check {
+                return false;
+            }
+        }
+    }
+
+    return true
+}
+
+fn is_check(game: Game) -> Vec<Color> {
+    let all_moves = get_all_available_moves(game.clone());
+    let mut checks: Vec<Color> = vec![];
+
+    for ((pos, piece, color), (option_piece, position)) in all_moves {
+        match option_piece
+        {
+            None => continue,
+            Some(captured_piece) => {
+                if captured_piece == Piece::King {
+                    checks.append(&mut vec![Color::to_opposite(color)])
+                }
+            }
+        }
+    }
+    return checks
+}
+
+pub fn get_all_turn_available_moves(game: Game) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
+    let available_moves = get_all_available_moves(game.clone());
+    let turn = get_turn(game.clone());
+    let mut moves = vec![];
+
+    for ((pos, piece, color), (option_piece, position)) in available_moves {
+        if turn == color {
+            let mut vec = vec![((pos, piece, color), (option_piece, position))];
+            moves.append(&mut vec );
+        }
+    }
+
+    return moves;
 }
 
 pub fn get_all_available_moves(game: Game) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
@@ -276,7 +343,55 @@ pub fn move_exists_in_list(available_moves: Vec<((Position, Piece, Color), (Opti
     return false;
 }
 
-pub fn move_piece(game_non_mut: Game, from: Position, to: Position) -> Game {
+///
+///
+/// # Arguments
+///
+/// * `game`: Will be copied to make changes
+/// * `color`: Color of the turn
+/// * `from`: Position it comes from
+/// * `to`: Position it goes to
+///
+/// returns: bool
+fn is_valid_move(game: Game, from: Position, to: Position) -> bool {
+    let mut game_copy = game.clone();
+    let turn = get_turn(game_copy.clone());
+
+    game_copy = move_piece(game_copy.clone(), turn.clone(), from.clone(), to.clone());
+
+    let checks = is_check(game_copy.clone());
+
+    for check_color in checks.iter() {
+        if *check_color == turn {
+            return false;
+        }
+    }
+
+    return true
+}
+
+fn move_piece(mut game: Game, turn: Color, from: Position, to: Position) -> Game {
+    match get_piece_from_position(game.board.clone(), from.clone()) {
+        Some((piece, color)) => {
+            if color == turn {
+                match game.board.set(from.row, from.column, 0) {
+                    Ok(_) => (),
+                    Err(_) => panic!("board couldnt be set."),
+                };
+                match game.board.set(to.row, to.column, piece + color) {
+                    Ok(_) => (),
+                    Err(_) => panic!("board couldnt be set."),
+                };
+                return game;
+            }
+
+            panic!("Trying to move {} from {} of the color {}, to {} but it is {} turn.", piece, from, color, to, turn)
+        }
+        None => panic!("Couldnt find a piece at the position.")
+    }
+}
+
+pub fn try_move_piece(game_non_mut: Game, from: Position, to: Position) -> Game {
     let mut game = game_non_mut.clone();
     let piece_available_moves = get_available_moves(game.clone(), from.clone());
 
@@ -285,23 +400,18 @@ pub fn move_piece(game_non_mut: Game, from: Position, to: Position) -> Game {
     let turn = get_turn(game.clone() );
 
     if can_move {
-        match get_piece_from_position(game.board.clone(),from.clone()) {
-            Some((piece, color)) => {
-                if color == turn {
-                    match game.board.set(from.row, from.column, 0) {
-                        Ok(_) => game.turn += 1,
-                        Err(_) => panic!("board couldnt be set."),
-                    };
-                    match game.board.set(to.row, to.column, piece + color) {
-                        Ok(_) => game.turn += 1,
-                        Err(_) => panic!("board couldnt be set."),
-                    };
-                    return game;
-                }
-
-                panic!("Trying to move {} from {} of the color {}, to {} but it is {} turn.", piece, from, color, to, turn)
+        if is_valid_move(game.clone(), from.clone(), to.clone())
+        {
+            let mut new_game = move_piece(game.clone(), turn, from, to);
+            if is_checkmate(new_game.clone()) {
+                println!("Is checkmate")
             }
-            _ => ()
+            new_game.turn += 1;
+            return new_game
+        }
+        else {
+            println!("Couldnt move piece because of check.");
+            return game;
         }
     }
 

@@ -22,6 +22,13 @@ impl Color {
             Color::Black => 8_u8,
         }
     }
+
+    pub fn to_opposite(value: Color) -> Color {
+        match value {
+            Color::White => Color::Black,
+            Color::Black => Color::White
+        }
+    }
 }
 
 impl ops::Add<Color> for Piece {
