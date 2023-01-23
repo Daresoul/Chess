@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 array2d = "0.3.0"
+ggez = "0.8.1"
 panic = "0.0.0"

@@ -5,5 +5,5 @@ use crate::chess::Position;
 pub struct Game {
     pub board: Array2D<u8>,
     pub turn: u32,
-    pub log: Vec<(Position, Position)>
+    pub log: Vec<(Position, Position)>,
 }

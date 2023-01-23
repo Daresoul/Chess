@@ -1,3 +1,5 @@
+use std::borrow::Borrow;
+use std::fmt::Display;
 use std::io::{stdin, stdout, Write};
 use std::vec;
 use array2d::Array2D;
@@ -5,12 +7,14 @@ pub use crate::chess::color::Color;
 pub use crate::chess::game::Game;
 pub use crate::chess::piece::Piece;
 pub use crate::chess::position::Position;
+pub use crate::chess::image_struct::Images;
 
 mod piece;
 mod color;
 mod position;
 mod utils;
 mod game;
+mod image_struct;
 
 
 // 1: pawn
@@ -55,7 +59,8 @@ pub fn game_loop() -> () {
     return ()
 }
 
-fn read_line() -> usize {
+
+pub fn read_line() -> usize {
     let mut s = String::new();
 
     let _= stdout().flush();
@@ -137,6 +142,43 @@ pub fn print_available_moves(available_moves: Vec<((Position, Piece, Color), (Op
 
     }
     println!("]");
+}
+
+pub fn available_moves_to_string(available_moves: &Vec<((Position, Piece, Color), (Option<Piece>, Position))>) -> String {
+    let mut string = String::new();
+    string.push_str("[\n");
+    for ((piece_current_position, piece, color), (future_position_piece, future_position)) in available_moves.iter() {
+
+        match future_position_piece {
+            None => {
+                string.push_str("(");
+                string.push_str(&piece_current_position.to_string());
+                string.push_str(", ");
+                string.push_str(&piece.to_string());
+                string.push_str(", ");
+                string.push_str(&color.to_string());
+                string.push_str(") ==> (None, ");
+                string.push_str(&future_position.to_string());
+                string.push_str(")\n");
+            },
+            Some(piece_at_position) => {
+                string.push_str("(");
+                string.push_str(&piece_current_position.to_string());
+                string.push_str(", ");
+                string.push_str(&piece.to_string());
+                string.push_str(", ");
+                string.push_str(&color.to_string());
+                string.push_str(") ==> (");
+                string.push_str(&piece_at_position.to_string());
+                string.push_str(", ");
+                string.push_str(&future_position.to_string());
+                string.push_str(")\n");
+            },
+        }
+
+    }
+    string.push_str("]\n");
+    return string;
 }
 
 fn is_checkmate(game: Game) -> bool {
@@ -226,7 +268,7 @@ pub fn get_available_moves(game: Game, pos: Position) -> Vec<((Position, Piece, 
     }
 }
 
-fn get_piece_from_position(board: Array2D<u8>, pos: Position) -> Option<(Piece, Color)> {
+pub fn get_piece_from_position(board: Array2D<u8>, pos: Position) -> Option<(Piece, Color)> {
     match board.get(pos.row, pos.column) {
          None => panic!("Couldnt get the position: ({}, {}).", pos.column, pos.row),
         Some(piece_value) => {
@@ -414,8 +456,7 @@ pub fn try_move_piece(game_non_mut: Game, from: Position, to: Position) -> Game 
             return game;
         }
     }
-
-    panic!("Couldnt move...")
+    return game;
 }
 
 /***************************************************************************************************
