@@ -1,9 +1,19 @@
 use std::fmt;
 
-#[derive(Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct Position {
     pub column: usize, // x
     pub row: usize  // y
+}
+
+impl Position {
+    pub fn new(column: usize, row: usize) -> Position {
+        return Position {
+            column,
+            row
+        }
+    }
+
 }
 
 impl fmt::Display for Position {

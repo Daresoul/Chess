@@ -1,7 +1,8 @@
 use std::{fmt, ops};
 use crate::chess::color::Color;
+const LOW_3_BITS_MASK: u8 = 0b0000_0111;
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub enum Piece {
 
     Pawn = 1,   // 1 or 9
@@ -14,7 +15,7 @@ pub enum Piece {
 
 impl Piece {
     pub fn from_u8(value: u8) -> Piece {
-        match value {
+        match value & LOW_3_BITS_MASK {
             1 => Piece::Pawn,
             2 => Piece::Bishop,
             3 => Piece::Knight,
@@ -34,6 +35,10 @@ impl Piece {
             Piece::Queen => 5_u8,
             Piece::King => 6_u8,
         }
+    }
+
+    pub fn get_piece_enum(input: u8) -> Piece {
+        return Piece::from_u8(input )
     }
 }
 
@@ -55,7 +60,7 @@ impl ops::Add<Piece> for Color {
     type Output = u8;
 
     fn add(self, _rhs: Piece) -> u8 {
-        return Piece::to_u8(_rhs) + Color::to_u8(self);
+        return Piece::to_u8(_rhs) + Color::to_u8(&self);
     }
 }
 

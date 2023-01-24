@@ -1,7 +1,10 @@
 use std::{fmt, ops};
+use crate::chess::color;
 use crate::chess::piece::Piece;
 
-#[derive(Clone, Eq, PartialEq)]
+const FOURTH_BIT_BITS_MASK: u8 = 0b0000_1000;
+
+#[derive(Debug, Clone)]
 pub enum Color {
     White = 0,
     Black = 8
@@ -16,7 +19,7 @@ impl Color {
         }
     }
 
-    pub fn to_u8(value: Color) -> u8 {
+    pub fn to_u8(value: &Color) -> u8 {
         return match value {
             Color::White => 0_u8,
             Color::Black => 8_u8,
@@ -29,13 +32,30 @@ impl Color {
             Color::Black => Color::White
         }
     }
+
+    pub fn get_piece_color(input: u8) -> Color {
+        if input & FOURTH_BIT_BITS_MASK == 0 {
+            return Color::White
+        }
+        return Color::Black
+    }
 }
 
 impl ops::Add<Color> for Piece {
     type Output = u8;
 
     fn add(self, _rhs: Color) -> u8 {
-        return Piece::to_u8(self) + Color::to_u8(_rhs);
+        return Piece::to_u8(self) + Color::to_u8(&_rhs);
+    }
+}
+
+impl PartialEq<Color> for Color {
+    fn eq(&self, other: &Color) -> bool {
+        return Color::to_u8(self) == Color::to_u8(other)
+    }
+
+    fn ne(&self, other: &Color) -> bool {
+        return Color::to_u8(self) != Color::to_u8(other)
     }
 }
 

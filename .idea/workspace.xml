@@ -8,13 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1e35ec0-13b5-4d64-9f97-44ba6034d5e2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/chess/image_struct.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/draw_chess.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Chess.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Chess.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/chess/game/chess_error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/color.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/color.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/game.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/game.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/piece.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/piece.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/position.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/position.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,26 +45,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/tomato/git/Chess/target/debug",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/tomato/git/Chess/target/debug&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/target/debug" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/chess/game" />
       <recent name="$PROJECT_DIR$/target/debug/resources" />
       <recent name="$PROJECT_DIR$/src/resources" />
     </key>

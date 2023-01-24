@@ -64,7 +64,7 @@ impl State {
 
 
         let state = State {
-            game: chess::create_board_from_string("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", 0),
+            game: Game::default(),
             current_available_moves: vec![],
             pos_x: 100.0,
             pos_y: 100.0,
@@ -89,7 +89,7 @@ impl State {
     }
 
     fn set_available_moves(&mut self) -> GameResult<State> {
-        self.current_available_moves = chess::get_all_turn_available_moves(self.game.clone());
+        self.current_available_moves = self.game.get_all_turn_available_moves();
 
         Ok(self.clone())
     }
@@ -170,20 +170,20 @@ impl ggez::event::EventHandler<GameError> for State {
                 row
             };
 
-            match chess::get_piece_from_position(self.game.board.clone(), pos.clone()) {
+            match self.game.get_piece_from_position(&pos) {
                 None => {
                     match &self.selected {
                         None => println!("whoooo"),
                         Some(t) => {
                             println!("yes here");
-                            self.game = chess::try_move_piece(self.game.clone(), t.clone(), pos.clone());
+                            self.game.try_move_piece( t, &pos);
                             self.set_available_moves();
                             ()
                         }
                     }
                 },
                 Some((piece, color)) => {
-                    let turn = chess::get_turn(self.game.clone());
+                    let turn = self.game.get_turn();
 
                     if color == turn {
                         println!("in here");
@@ -196,7 +196,7 @@ impl ggez::event::EventHandler<GameError> for State {
                             },
                             Some(t) => {
                                 println!("fhdjsfshj");
-                                self.game = chess::try_move_piece(self.game.clone(), t.clone(), pos.clone());
+                                self.game.try_move_piece(t, &pos);
                                 self.set_available_moves();
                                 ()
                             }
