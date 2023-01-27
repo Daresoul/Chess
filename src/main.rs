@@ -9,13 +9,17 @@ use array2d::Array2D;
 use ggez::graphics::Image;
 use ggez::Context;
 use ggez::*;
-use crate::chess::{Color, Game, Piece, Position};
 use ggez::graphics::Drawable;
+use crate::chess::position::position::Position;
+use crate::chess::piece::piece::Piece;
+use crate::chess::color::color::Color;
+use crate::chess::game::r#move::chess_move::{ChessMove, MoveType};
+use crate::chess::game::game::Game;
 
 #[derive(Clone)]
 struct State {
     game: Game,
-    current_available_moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))>,
+    current_available_moves: Vec<ChessMove>,
 
     pos_x: f32,
     pos_y: f32,
@@ -165,18 +169,17 @@ impl ggez::event::EventHandler<GameError> for State {
         };
 
         if column < 8 && row < 8 {
-            let pos = Position {
-                column,
-                row
-            };
+            let pos = Position::new(column, row);
 
             match self.game.get_piece_from_position(&pos) {
                 None => {
                     match &self.selected {
-                        None => println!("whoooo"),
+                        None => (),
                         Some(t) => {
-                            println!("yes here");
-                            self.game.try_move_piece( t, &pos);
+                            match self.game.try_move_piece( t, &pos) {
+                                Ok(t) => (),
+                                Err(err) => panic!("{}", err)
+                            };
                             self.set_available_moves();
                             ()
                         }
@@ -186,7 +189,6 @@ impl ggez::event::EventHandler<GameError> for State {
                     let turn = self.game.get_turn();
 
                     if color == turn {
-                        println!("in here");
                         self.selected = Some(pos)
                     }
                     else {
@@ -195,7 +197,6 @@ impl ggez::event::EventHandler<GameError> for State {
                                 self.selected = Some(pos);
                             },
                             Some(t) => {
-                                println!("fhdjsfshj");
                                 self.game.try_move_piece(t, &pos);
                                 self.set_available_moves();
                                 ()
@@ -205,7 +206,7 @@ impl ggez::event::EventHandler<GameError> for State {
                 }
             }
         }
-        println!("Mouse button pressed: {:?}, x: {}, y: {}", button, x, y);
+        //println!("Mouse button pressed: {:?}, x: {}, y: {}", button, x, y);
         Ok(())
     }
 
@@ -214,7 +215,8 @@ impl ggez::event::EventHandler<GameError> for State {
 
         let mut filler = true;
 
-        let text = graphics::Text::new(chess::available_moves_to_string(&self.current_available_moves));
+        let string =  Game::available_moves_to_string(&self.current_available_moves);
+        let text = graphics::Text::new(string);
 
         canvas.draw(&text,
                     graphics::DrawParam::new()
@@ -318,4 +320,19 @@ fn main() {
     let state = State::new(&mut ctx).unwrap();
 
     event::run(ctx, event_loop, state);
+
+    /*let mut game = Game::create_board_from_string("2b1kb2/8/8/8/8/8/8/2B1KB2", 1);
+
+    chess::print_board(game.clone());
+    let position_from = position::new(2,0);
+    let position_to = position::new(4,2);
+
+    //let position_from = position::new(2,7);
+    //let position_to = position::new(4,5);
+    match game.try_move_piece(&position_from, &position_to) {
+        Ok(new_game) => (),
+        Err(err) => println!("{}", err)
+    };
+    chess::print_board(game.clone());
+    ()*/
 }

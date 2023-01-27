@@ -1,19 +1,20 @@
-use std::borrow::Borrow;
+/*use std::borrow::Borrow;
 use std::fmt::Display;
 use std::io::{stdin, stdout, Write};
 use std::vec;
 use array2d::Array2D;
-pub use crate::chess::color::Color;
+pub use crate::chess::color::color;
 pub use crate::chess::game::Game;
-pub use crate::chess::piece::Piece;
-pub use crate::chess::position::Position;
+pub use crate::chess::piece::piece;
+pub use crate::chess::position::position;
 pub use crate::chess::image_struct::Images;
+use crate::chess::game::log;*/
 
-mod piece;
-mod color;
-mod position;
+pub(crate) mod piece;
+pub(crate) mod color;
+pub(crate) mod position;
 mod utils;
-mod game;
+pub(crate) mod game;
 mod image_struct;
 
 
@@ -24,10 +25,10 @@ mod image_struct;
 // 5: queen
 // 6: king
 
-const LOW_3_BITS_MASK: u8 = 0b0000_0111;
-const FOURTH_BIT_BITS_MASK: u8 = 0b0000_1000;
+//const LOW_3_BITS_MASK: u8 = 0b0000_0111;
+//const FOURTH_BIT_BITS_MASK: u8 = 0b0000_1000;
 
-pub fn game_loop() -> () {
+/*pub fn game_loop() -> () {
     // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
     let mut game = create_board_from_string("k7/3Q3R/8/8/8/8/8/K7", 0);
     print_board(game.clone());
@@ -50,7 +51,7 @@ pub fn game_loop() -> () {
         let y2 = read_line();
         if y2 == 8 { continue }
 
-        game = try_move_piece(game.clone(), Position {column: x1, row: y1}, Position { column: x2, row: y2 });
+        game = try_move_piece(game.clone(), position {column: x1, row: y1}, position { column: x2, row: y2 });
         print_board(game.clone());
         let available_moves = get_all_turn_available_moves(game.clone());
         print_available_moves(available_moves);
@@ -82,13 +83,13 @@ pub fn read_line() -> usize {
     }
 
     return result
-}
+}*/
 
-pub fn begin() -> Game {
+/*pub fn begin() -> Game {
     return Game {
         board: Array2D::filled_with(0, 8, 8),
         turn: 0,
-        log: vec![]
+        log: game::log::new()
     }
 }
 
@@ -109,7 +110,7 @@ pub fn print_board(game: Game) {
             }
         }
         print!("\n")
-    }
+    }*/
 
     /*let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
@@ -119,7 +120,7 @@ pub fn print_board(game: Game) {
     }
     print!("\n")*/
 
-    print!("   ");
+    /*print!("   ");
     for _ in 0..8 {
         print!("¯¯¯¯¯")
     }
@@ -131,7 +132,7 @@ pub fn print_board(game: Game) {
     print!("\n")
 }
 
-pub fn print_available_moves(available_moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))>) {
+pub fn print_available_moves(available_moves: Vec<((position, piece, color), (Option<piece>, position))>) {
     println!("[");
     for ((piece_current_position, piece, color), (future_position_piece, future_position)) in available_moves.iter() {
 
@@ -144,7 +145,7 @@ pub fn print_available_moves(available_moves: Vec<((Position, Piece, Color), (Op
     println!("]");
 }
 
-pub fn available_moves_to_string(available_moves: &Vec<((Position, Piece, Color), (Option<Piece>, Position))>) -> String {
+pub fn available_moves_to_string(available_moves: &Vec<((position, piece, color), (Option<piece>, position))>) -> String {
     let mut string = String::new();
     string.push_str("[\n");
     for ((piece_current_position, piece, color), (future_position_piece, future_position)) in available_moves.iter() {
@@ -179,11 +180,11 @@ pub fn available_moves_to_string(available_moves: &Vec<((Position, Piece, Color)
     }
     string.push_str("]\n");
     return string;
-}
+}*/
 
-fn is_checkmate(game: Game) -> bool {
+/*fn is_checkmate(game: Game) -> bool {
     let mut game_copy = game.clone();
-    let turn = Color::to_opposite(get_turn(game_copy.clone()));
+    let turn = color::to_opposite(get_turn(game_copy.clone()));
 
     for ((position, _, piece_color),(_, enemy_position)) in get_all_turn_available_moves(game.clone()) {
         if piece_color == turn {
@@ -207,17 +208,17 @@ fn is_checkmate(game: Game) -> bool {
     return true
 }
 
-fn is_check(game: Game) -> Vec<Color> {
+fn is_check(game: Game) -> Vec<color> {
     let all_moves = get_all_available_moves(game.clone());
-    let mut checks: Vec<Color> = vec![];
+    let mut checks: Vec<color> = vec![];
 
     for ((pos, piece, color), (option_piece, position)) in all_moves {
         match option_piece
         {
             None => continue,
             Some(captured_piece) => {
-                if captured_piece == Piece::King {
-                    checks.append(&mut vec![Color::to_opposite(color)])
+                if captured_piece == piece::King {
+                    checks.append(&mut vec![color::to_opposite(color)])
                 }
             }
         }
@@ -225,7 +226,7 @@ fn is_check(game: Game) -> Vec<Color> {
     return checks
 }
 
-pub fn get_all_turn_available_moves(game: Game) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
+pub fn get_all_turn_available_moves(game: Game) -> Vec<((position, piece, color), (Option<piece>, position))> {
     let available_moves = get_all_available_moves(game.clone());
     let turn = get_turn(game.clone());
     let mut moves = vec![];
@@ -240,11 +241,11 @@ pub fn get_all_turn_available_moves(game: Game) -> Vec<((Position, Piece, Color)
     return moves;
 }
 
-pub fn get_all_available_moves(game: Game) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
+pub fn get_all_available_moves(game: Game) -> Vec<((position, piece, color), (Option<piece>, position))> {
     let mut moves = vec![];
     for x in 0..game.board.num_columns() {
         for y in 0..game.board.num_rows() {
-            let position = Position {column: x, row: y};
+            let position = position {column: x, row: y};
             moves.append( &mut get_available_moves(game.clone(), position))
         }
     }
@@ -252,23 +253,23 @@ pub fn get_all_available_moves(game: Game) -> Vec<((Position, Piece, Color), (Op
     return moves
 }
 
-pub fn get_available_moves(game: Game, pos: Position) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
+pub fn get_available_moves(game: Game, pos: position) -> Vec<((position, piece, color), (Option<piece>, position))> {
     match get_piece_from_position(game.board.clone(), pos.clone()) {
         None => vec![],
         Some((piece, color)) => {
             match piece {
-                Piece::Pawn => return available_pawn_moves(game, piece, color, pos),
-                Piece::Rook => return available_rook_moves(game, piece, color, pos),
-                Piece::Bishop => return available_bishop_moves(game, piece, color, pos),
-                Piece::Knight => return available_knight_moves(game, piece, color, pos),
-                Piece::Queen => return available_queen_moves(game, piece, color, pos),
-                Piece::King => return available_king_moves(game, piece, color, pos)
+                piece::Pawn => return available_pawn_moves(game, piece, color, pos),
+                piece::Rook => return available_rook_moves(game, piece, color, pos),
+                piece::Bishop => return available_bishop_moves(game, piece, color, pos),
+                piece::Knight => return available_knight_moves(game, piece, color, pos),
+                piece::Queen => return available_queen_moves(game, piece, color, pos),
+                piece::King => return available_king_moves(game, piece, color, pos)
             }
         }
     }
 }
 
-pub fn get_piece_from_position(board: Array2D<u8>, pos: Position) -> Option<(Piece, Color)> {
+pub fn get_piece_from_position(board: Array2D<u8>, pos: position) -> Option<(piece, color)> {
     match board.get(pos.row, pos.column) {
          None => panic!("Couldnt get the position: ({}, {}).", pos.column, pos.row),
         Some(piece_value) => {
@@ -284,23 +285,23 @@ pub fn get_piece_from_position(board: Array2D<u8>, pos: Position) -> Option<(Pie
     }
 }
 
-fn get_piece(input: u8) -> Piece {
-    return Piece::from_u8(input & LOW_3_BITS_MASK)
+fn get_piece(input: u8) -> piece {
+    return piece::from_u8(input & LOW_3_BITS_MASK)
 }
 
-fn get_piece_color(input: u8) -> Color {
+fn get_piece_color(input: u8) -> color {
     if input & FOURTH_BIT_BITS_MASK == 0 {
-        return Color::White
+        return color::White
     }
-    return Color::Black
+    return color::Black
 }
 
-pub fn get_turn(game: Game) -> Color {
+pub fn get_turn(game: Game) -> color {
     if game.turn % 2 == 0 {
-        return Color::White;
+        return color::White;
     }
 
-    return Color::Black
+    return color::Black
 }
 
 pub fn create_board_from_string(positions: &str, turn: u32) -> Game {
@@ -322,61 +323,61 @@ pub fn create_board_from_string(positions: &str, turn: u32) -> Game {
             '6' => x += 6,
             '7' => x += 7,
             '8' => x += 8,
-            'r' => match game.board.set(y, x, Piece::Rook + Color::Black) {
+            'r' => match game.board.set(y, x, piece::Rook + color::Black) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'b' => match game.board.set(y, x, Piece::Bishop + Color::Black) {
+            'b' => match game.board.set(y, x, piece::Bishop + color::Black) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'n' => match game.board.set(y, x, Piece::Knight + Color::Black) {
+            'n' => match game.board.set(y, x, piece::Knight + color::Black) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'k' => match game.board.set(y, x, Piece::King + Color::Black) {
+            'k' => match game.board.set(y, x, piece::King + color::Black) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'q' => match game.board.set(y, x, Piece::Queen + Color::Black) {
+            'q' => match game.board.set(y, x, piece::Queen + color::Black) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'p' => match game.board.set(y, x, Piece::Pawn + Color::Black) {
+            'p' => match game.board.set(y, x, piece::Pawn + color::Black) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}"),
             }
-            'R' => match game.board.set(y, x, Piece::Rook + Color::White) {
+            'R' => match game.board.set(y, x, piece::Rook + color::White) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             }, //for rooks
-            'B' => match game.board.set(y, x, Piece::Bishop + Color::White) {
+            'B' => match game.board.set(y, x, piece::Bishop + color::White) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'N' => match game.board.set(y, x, Piece::Knight + Color::White) {
+            'N' => match game.board.set(y, x, piece::Knight + color::White) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'K' => match game.board.set(y, x, Piece::King + Color::White) {
+            'K' => match game.board.set(y, x, piece::King + color::White) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'Q' => match game.board.set(y, x, Piece::Queen + Color::White) {
+            'Q' => match game.board.set(y, x, piece::Queen + color::White) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            'P' => match game.board.set(y, x, Piece::Pawn + Color::White) {
+            'P' => match game.board.set(y, x, piece::Pawn + color::White) {
                 Ok(_) => x += 1,
                 Err(e) => println!("Couldnt set the board {e:?}")
             },
-            _ => println!("Piece not known.")
+            _ => println!("piece not known.")
         }
     }
     return game
 }
 
-pub fn move_exists_in_list(available_moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))>, to: Position) -> bool {
+pub fn move_exists_in_list(available_moves: Vec<((position, piece, color), (Option<piece>, position))>, to: position) -> bool {
     for (_, (_ ,new_pos)) in available_moves {
         if new_pos.column == to.column && new_pos.row == to.row {
             return true;
@@ -390,12 +391,12 @@ pub fn move_exists_in_list(available_moves: Vec<((Position, Piece, Color), (Opti
 /// # Arguments
 ///
 /// * `game`: Will be copied to make changes
-/// * `color`: Color of the turn
-/// * `from`: Position it comes from
-/// * `to`: Position it goes to
+/// * `color`: color of the turn
+/// * `from`: position it comes from
+/// * `to`: position it goes to
 ///
 /// returns: bool
-fn is_valid_move(game: Game, from: Position, to: Position) -> bool {
+fn is_valid_move(game: Game, from: position, to: position) -> bool {
     let mut game_copy = game.clone();
     let turn = get_turn(game_copy.clone());
 
@@ -412,7 +413,7 @@ fn is_valid_move(game: Game, from: Position, to: Position) -> bool {
     return true
 }
 
-fn move_piece(mut game: Game, turn: Color, from: Position, to: Position) -> Game {
+fn move_piece(mut game: Game, turn: color, from: position, to: position) -> Game {
     match get_piece_from_position(game.board.clone(), from.clone()) {
         Some((piece, color)) => {
             if color == turn {
@@ -433,7 +434,7 @@ fn move_piece(mut game: Game, turn: Color, from: Position, to: Position) -> Game
     }
 }
 
-pub fn try_move_piece(game_non_mut: Game, from: Position, to: Position) -> Game {
+pub fn try_move_piece(game_non_mut: Game, from: position, to: position) -> Game {
     let mut game = game_non_mut.clone();
     let piece_available_moves = get_available_moves(game.clone(), from.clone());
 
@@ -467,20 +468,20 @@ pub fn try_move_piece(game_non_mut: Game, from: Position, to: Position) -> Game 
 ****************************************************************************************************
 ***************************************************************************************************/ */
 
-fn create_entry_from_position(piece_info: (Position, Piece, Color), move_to_pos_and_piece: (Option<Piece>, Position)) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
+fn create_entry_from_position(piece_info: (position, piece, color), move_to_pos_and_piece: (Option<piece>, position)) -> Vec<((position, piece, color), (Option<piece>, position))> {
     return vec![(piece_info, move_to_pos_and_piece)]
 }
 
-fn available_pawn_moves(game: Game, piece: Piece, color: Color, pos: Position) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
+fn available_pawn_moves(game: Game, piece: piece, color: color, pos: position) -> Vec<((position, piece, color), (Option<piece>, position))> {
     // TODO: Add ein peasant
     // TODO: Add promotion
 
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
-    let is_white = color == Color::White;
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
+    let is_white = color == color::White;
 
     // Do single move
     let row_single = if is_white {pos.row - 1} else {pos.row + 1};
-    let move_position = Position { column: pos.column, row: row_single };
+    let move_position = position { column: pos.column, row: row_single };
     match get_piece_from_position(game.board.clone(), move_position.clone()) {
         None => {
             let piece_info = (pos.clone(), piece.clone(), color.clone());
@@ -491,7 +492,7 @@ fn available_pawn_moves(game: Game, piece: Piece, color: Color, pos: Position) -
     }
 
     if pos.column > 0 {
-        let move_position = Position { column: pos.column - 1, row: row_single };
+        let move_position = position { column: pos.column - 1, row: row_single };
         match get_piece_from_position(game.board.clone(), move_position.clone()) {
             None => (),
             Some((captured_piece, captured_color)) => {
@@ -506,7 +507,7 @@ fn available_pawn_moves(game: Game, piece: Piece, color: Color, pos: Position) -
     }
 
     if pos.column < 7 {
-        let move_position = Position { column: pos.column + 1, row: row_single };
+        let move_position = position { column: pos.column + 1, row: row_single };
         match get_piece_from_position(game.board.clone(), move_position.clone()) {
             None => (),
             Some((captured_piece, captured_color)) => {
@@ -522,7 +523,7 @@ fn available_pawn_moves(game: Game, piece: Piece, color: Color, pos: Position) -
 
     if (is_white && pos.row == 6) || (!is_white && pos.row == 1) {
         let row_double = if is_white {pos.row - 2} else {pos.row + 2};
-        let move_position = Position { column: pos.column, row: row_double };
+        let move_position = position { column: pos.column, row: row_double };
 
         match get_piece_from_position(game.board.clone(), move_position.clone()) {
             None => {
@@ -537,12 +538,12 @@ fn available_pawn_moves(game: Game, piece: Piece, color: Color, pos: Position) -
     return moves;
 }
 
-fn rook_row_column(iter_value: usize, val: usize, direction: u8) -> Position {
+fn rook_row_column(iter_value: usize, val: usize, direction: u8) -> position {
     if direction == 1 || direction == 3 {
-        return Position {column: iter_value, row: val}
+        return position {column: iter_value, row: val}
     }
     else {
-        return Position {column: val, row: iter_value}
+        return position {column: val, row: iter_value}
     }
 }
 
@@ -565,8 +566,8 @@ fn create_iter(start: usize, end: usize, rev: bool) -> Vec<usize> {
 // 1 = right
 // 2 = down
 // 3 = left
-fn rook_moves(game: Game, pos: Position, piece: Piece, color: Color, direction: u8) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn rook_moves(game: Game, pos: position, piece: piece, color: color, direction: u8) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
     let iter =
         if direction == 0 {create_iter(0, pos.row.clone(), true)}
         else if direction == 1 {create_iter(pos.column.clone() + 1, 8, false)}
@@ -604,32 +605,32 @@ fn rook_moves(game: Game, pos: Position, piece: Piece, color: Color, direction: 
 // 1: diagonally up right + -
 // 2: diagonally down right + +
 // 3: diagonally down left - +
-fn bishop_moves(game: Game, pos: Position, piece: Piece, color: Color, direction: u8) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn bishop_moves(game: Game, pos: position, piece: piece, color: color, direction: u8) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
     let iter_vec = create_iter(0, pos.row.clone(), true);
     for (i, _) in iter_vec.iter().enumerate() {
 
         let move_position = if direction == 0 {
                 if pos.column >= (i+1) && pos.row >= (i+1) {
-                    Position { column: pos.column - (i + 1), row: pos.row - (i + 1) }
+                    position { column: pos.column - (i + 1), row: pos.row - (i + 1) }
                 } else {
                     continue;
                 }
             } else if direction == 1 {
                 if pos.column < 8 - (i + 1) && pos.row >= (i+1) {
-                    Position { column: pos.column + (i + 1), row: pos.row - (i + 1) }
+                    position { column: pos.column + (i + 1), row: pos.row - (i + 1) }
                 } else {
                     continue;
                 }
             } else if direction == 2 {
                 if pos.column < 8 - (i + 1) && pos.row < 8 - (i + 1) {
-                    Position { column: pos.column + (i+1), row: pos.row + (i+1)}
+                    position { column: pos.column + (i+1), row: pos.row + (i+1)}
                 } else {
                     continue;
                 }
             } else {
                 if pos.column >= (i+1) && pos.row < 8 - (i + 1) {
-                    Position { column: pos.column - (i+1), row: pos.row + (i+1)}
+                    position { column: pos.column - (i+1), row: pos.row + (i+1)}
                 } else {
                     continue;
                 }
@@ -655,8 +656,8 @@ fn bishop_moves(game: Game, pos: Position, piece: Piece, color: Color, direction
     return moves;
 }
 
-fn knight_moves(game: Game, pos: Position, piece: Piece, color: Color) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn knight_moves(game: Game, pos: position, piece: piece, color: color) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
 
     let knight_offsets: [(i8, i8, usize, usize); 8] = [
         (-1, -2, 1, 2), (1, -2, 1, 2), (2, -1, 2, 1), (2, 1, 2, 1),
@@ -683,7 +684,7 @@ fn knight_moves(game: Game, pos: Position, piece: Piece, color: Color) -> Vec<((
                 pos.row - y_usize
             };
 
-        let move_position = Position {column: new_column, row: new_row};
+        let move_position = position {column: new_column, row: new_row};
 
         match get_piece_from_position(game.board.clone(), move_position.clone()) {
             None => {
@@ -705,8 +706,8 @@ fn knight_moves(game: Game, pos: Position, piece: Piece, color: Color) -> Vec<((
     return moves;
 }
 
-fn king_moves(game: Game, pos: Position, piece: Piece, color: Color) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn king_moves(game: Game, pos: position, piece: piece, color: color) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
 
     let king_offset: [(i8, i8, usize, usize); 8] = [
         (0, -1, 0, 1), (1, -1, 1, 1), (1, 0, 1, 0), (1, 1, 1, 1),
@@ -732,7 +733,7 @@ fn king_moves(game: Game, pos: Position, piece: Piece, color: Color) -> Vec<((Po
                 pos.row - y_usize
             };
 
-        let move_position = Position { column: new_column, row: new_row };
+        let move_position = position { column: new_column, row: new_row };
 
 
         match get_piece_from_position(game.board.clone(), move_position.clone()) {
@@ -754,8 +755,8 @@ fn king_moves(game: Game, pos: Position, piece: Piece, color: Color) -> Vec<((Po
     return moves;
 }
 
-fn available_rook_moves(game: Game, piece: Piece, color: Color, pos: Position) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn available_rook_moves(game: Game, piece: piece, color: color, pos: position) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
 
     moves.append(&mut rook_moves(game.clone(), pos.clone(), piece.clone(), color.clone(), 0));
     moves.append(&mut rook_moves(game.clone(), pos.clone(), piece.clone(),color.clone(), 1));
@@ -765,8 +766,8 @@ fn available_rook_moves(game: Game, piece: Piece, color: Color, pos: Position) -
     return moves;
 }
 
-fn available_bishop_moves(game: Game, piece: Piece, color: Color, pos: Position) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn available_bishop_moves(game: Game, piece: piece, color: color, pos: position) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
 
     moves.append(&mut bishop_moves(game.clone(), pos.clone(), piece.clone(), color.clone(), 0));
     moves.append(&mut bishop_moves(game.clone(), pos.clone(), piece.clone(), color.clone(), 1));
@@ -776,16 +777,16 @@ fn available_bishop_moves(game: Game, piece: Piece, color: Color, pos: Position)
     return moves;
 }
 
-fn available_knight_moves(game: Game, piece: Piece, color: Color, pos: Position) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn available_knight_moves(game: Game, piece: piece, color: color, pos: position) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
 
     moves.append(&mut knight_moves(game.clone(), pos.clone(), piece.clone(), color.clone()));
 
     return moves;
 }
 
-fn available_queen_moves(game: Game, piece: Piece, color: Color, pos: Position) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn available_queen_moves(game: Game, piece: piece, color: color, pos: position) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
 
     moves.append(&mut rook_moves(game.clone(), pos.clone(), piece.clone(), color.clone(), 0));
     moves.append(&mut rook_moves(game.clone(), pos.clone(), piece.clone(),color.clone(), 1));
@@ -800,10 +801,10 @@ fn available_queen_moves(game: Game, piece: Piece, color: Color, pos: Position) 
     return moves;
 }
 
-fn available_king_moves(game: Game, piece: Piece, color: Color, pos: Position) -> Vec<((Position, Piece, Color), (Option<Piece>, Position))> {
-    let mut moves: Vec<((Position, Piece, Color), (Option<Piece>, Position))> = vec![];
+fn available_king_moves(game: Game, piece: piece, color: color, pos: position) -> Vec<((position, piece, color), (Option<piece>, position))> {
+    let mut moves: Vec<((position, piece, color), (Option<piece>, position))> = vec![];
 
     moves.append(&mut king_moves(game.clone(), pos.clone(), piece.clone(), color.clone()));
 
     return moves;
-}
+}*/
