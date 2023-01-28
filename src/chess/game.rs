@@ -135,8 +135,8 @@ pub mod game {
                     MoveType::Castle(_from, _to) => {
                         string.push_str("Castle: ")
                     },
-                    MoveType::Promote => {
-                        string.push_str("Promote: ")
+                    MoveType::Promote(piece) => {
+                        string.push_str(format!("Promote to {piece}: ").as_str())
                     }
                 }
 
@@ -241,7 +241,12 @@ pub mod game {
                             Err(_) => panic!("board couldnt be set."),
                         };
                     },
-                    MoveType::Promote => ()
+                    MoveType::Promote(piece) => {
+                        match self.board.set(chess_move.to.row, chess_move.to.column, piece + chess_move.color.clone()) {
+                            Ok(_) => (),
+                            Err(_) => panic!("board couldnt be set."),
+                        };
+                    }
                 }
 
                 self.create_log(&chess_move);
@@ -666,24 +671,47 @@ pub mod game {
         }
 
         fn available_pawn_moves(&self, piece: &Piece, color: &Color, pos: &Position) -> Vec<ChessMove> {
-            // TODO: Add ein peasant
             // TODO: Add promotion
             let mut moves: Vec<ChessMove> = vec![];
-            let is_white = *color == Color::White;
+            let is_white = match color {
+                Color::White => true,
+                Color::Black => false
+            };
+
+            let is_promote = match is_white {
+                true => pos.row == 1,
+                false => pos.row == 6
+            };
 
             // Do single move
             let row_single = if is_white { pos.row - 1 } else { pos.row + 1 };
             let move_position = Position::new(pos.column, row_single);
             match self.get_piece_from_position(&move_position) {
                 None => {
-                    moves.append(&mut vec![ChessMove::new(
-                        pos.clone(),
-                        move_position,
-                        piece.clone(),
-                        color.clone(),
-                        None,
-                        MoveType::Move
-                    )]);
+                    if is_promote {
+                        let promote_pieces = [Piece::Queen, Piece::Bishop, Piece::Knight, Piece::Rook];
+                        for promote_piece in promote_pieces.iter() {
+
+                            moves.append(&mut vec![ChessMove::new(
+                                pos.clone(),
+                                move_position,
+                                piece.clone(),
+                                color.clone(),
+                                None,
+                                MoveType::Promote(*promote_piece)
+                            )]);
+                        }
+                    }
+                    else {
+                        moves.append(&mut vec![ChessMove::new(
+                            pos.clone(),
+                            move_position,
+                            piece.clone(),
+                            color.clone(),
+                            None,
+                            MoveType::Move
+                        )]);
+                    }
                 }
                 Some((_p, _c)) => ()//println!("piece: {}, color: {}, at position {}", p, c, pos.clone())
             }
@@ -695,14 +723,30 @@ pub mod game {
                     Some((captured_piece, captured_color)) => {
                         let has_same_color = captured_color != *color;
                         if has_same_color {
-                            moves.append(&mut vec![ChessMove::new(
-                                pos.clone(),
-                                move_position,
-                                piece.clone(),
-                                color.clone(),
-                                Some(captured_piece),
-                                MoveType::Move
-                            )]);
+                            if is_promote {
+                                let promote_pieces = [Piece::Queen, Piece::Bishop, Piece::Knight, Piece::Rook];
+                                for promote_piece in promote_pieces.iter() {
+
+                                    moves.append(&mut vec![ChessMove::new(
+                                        pos.clone(),
+                                        move_position,
+                                        piece.clone(),
+                                        color.clone(),
+                                        Some(captured_piece),
+                                        MoveType::Promote(*promote_piece)
+                                    )]);
+                                }
+                            }
+                            else {
+                                moves.append(&mut vec![ChessMove::new(
+                                    pos.clone(),
+                                    move_position,
+                                    piece.clone(),
+                                    color.clone(),
+                                    Some(captured_piece),
+                                    MoveType::Move
+                                )]);
+                            }
                         }
                     }
                 }
@@ -715,14 +759,30 @@ pub mod game {
                     Some((captured_piece, captured_color)) => {
                         let has_same_color = captured_color != *color;
                         if has_same_color {
-                            moves.append(&mut vec![ChessMove::new(
-                                pos.clone(),
-                                move_position,
-                                piece.clone(),
-                                color.clone(),
-                                Some(captured_piece),
-                                MoveType::Move
-                            )]);
+                            if is_promote {
+                                let promote_pieces = [Piece::Queen, Piece::Bishop, Piece::Knight, Piece::Rook];
+                                for promote_piece in promote_pieces.iter() {
+
+                                    moves.append(&mut vec![ChessMove::new(
+                                        pos.clone(),
+                                        move_position,
+                                        piece.clone(),
+                                        color.clone(),
+                                        Some(captured_piece),
+                                        MoveType::Promote(*promote_piece)
+                                    )]);
+                                }
+                            }
+                            else {
+                                moves.append(&mut vec![ChessMove::new(
+                                    pos.clone(),
+                                    move_position,
+                                    piece.clone(),
+                                    color.clone(),
+                                    Some(captured_piece),
+                                    MoveType::Move
+                                )]);
+                            }
                         }
                     }
                 }

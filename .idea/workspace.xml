@@ -9,13 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d1e35ec0-13b5-4d64-9f97-44ba6034d5e2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/color.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/color.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/game.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/game.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/game/chess_error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/game/chess_error.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/game/log.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/game/log.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/game/move.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/game/move.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/piece.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/piece.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/draw_chess.rs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,22 +42,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/tomato/git/Chess/target/debug",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.disableDetachedFileInspection/Users/tomato/git/Chess/src/chess/game.rs": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/tomato/git/Chess/target/debug&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspection/Users/tomato/git/Chess/src/chess/game.rs&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/target/debug" />
@@ -93,6 +89,7 @@
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+    <option name="version" value="2" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -103,6 +100,7 @@
       <option name="presentableId" value="Default" />
       <updated>1674394671398</updated>
       <workItem from="1674394672454" duration="29551000" />
+      <workItem from="1674908536135" duration="1250000" />
     </task>
     <servers />
   </component>

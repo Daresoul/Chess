@@ -24,7 +24,7 @@ pub mod chess_move {
         Move,
         EnPassant(Position),
         Castle(Position, Position),
-        Promote
+        Promote(Piece)
     }
 
     impl ChessMove {
