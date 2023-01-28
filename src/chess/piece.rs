@@ -1,7 +1,5 @@
 pub mod piece {
     use std::{fmt, ops};
-    use std::fmt::Display;
-    use crate::chess::color::color;
     use crate::chess::color::color::Color;
 
     const LOW_3_BITS_MASK: u8 = 0b0000_0111;
@@ -54,12 +52,12 @@ pub mod piece {
     impl fmt::Display for Piece {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
             match *self {
-                Piece::Pawn => write!(f, "Piece(Pawn)"),
-                Piece::Bishop => write!(f, "Piece(Bishop)"),
-                Piece::Knight => write!(f, "Piece(Knight)"),
-                Piece::Rook => write!(f, "Piece(Rook)"),
-                Piece::Queen => write!(f, "Piece(Queen)"),
-                Piece::King => write!(f, "Piece(King)"),
+                Piece::Pawn => write!(f, "Pawn"),
+                Piece::Bishop => write!(f, "Bishop"),
+                Piece::Knight => write!(f, "Knight"),
+                Piece::Rook => write!(f, "Rook"),
+                Piece::Queen => write!(f, "Queen"),
+                Piece::King => write!(f, "King"),
             }
         }
     }

@@ -1,13 +1,8 @@
 pub mod chess_error {
     use std::fmt;
-    use crate::chess::color::color;
-    use crate::chess::piece::piece;
     use crate::chess::piece::piece::Piece;
-    use crate::chess::position::position;
     use crate::chess::position::position::Position;
     use crate::chess::color::color::Color;
-
-    type Result<T> = std::result::Result<T, ChessError>;
 
     #[derive(Debug, Clone)]
     pub enum ChessError {

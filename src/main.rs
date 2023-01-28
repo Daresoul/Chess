@@ -2,18 +2,11 @@ mod chess;
 
 extern crate core;
 
-use std::{env, path, usize};
-use std::path::{Path, PathBuf};
-use std::thread::Thread;
-use array2d::Array2D;
 use ggez::graphics::Image;
-use ggez::Context;
 use ggez::*;
 use ggez::graphics::Drawable;
 use crate::chess::position::position::Position;
-use crate::chess::piece::piece::Piece;
-use crate::chess::color::color::Color;
-use crate::chess::game::r#move::chess_move::{ChessMove, MoveType};
+use crate::chess::game::r#move::chess_move::{ChessMove};
 use crate::chess::game::game::Game;
 
 #[derive(Clone)]
@@ -68,7 +61,7 @@ impl State {
 
 
         let state = State {
-            game: Game::default(),
+            game: Game::default(), //Game::create_board_from_string("r3k2r/8/8/8/8/8/PPPPPPPP/RNBQK2R", 0),
             current_available_moves: vec![],
             pos_x: 100.0,
             pos_y: 100.0,
@@ -100,7 +93,7 @@ impl State {
 }
 
 impl ggez::event::EventHandler<GameError> for State {
-    fn update(&mut self, ctx: &mut ggez::Context) -> GameResult {
+    fn update(&mut self, _ctx: &mut ggez::Context) -> GameResult {
         Ok(())
     }
 
@@ -109,8 +102,8 @@ impl ggez::event::EventHandler<GameError> for State {
         _ctx: &mut ggez::Context,
         x: f32,
         y: f32,
-        xrel: f32,
-        yrel: f32,
+        _: f32,
+        _: f32,
     ) -> GameResult {
         if self.mouse_down {
             self.pos_x = x;
@@ -122,7 +115,7 @@ impl ggez::event::EventHandler<GameError> for State {
     fn mouse_button_down_event(
         &mut self,
         _ctx: &mut ggez::Context,
-        button: ggez::input::mouse::MouseButton,
+        _: ggez::input::mouse::MouseButton,
         x: f32,
         y: f32,
     ) -> GameResult {
@@ -177,15 +170,15 @@ impl ggez::event::EventHandler<GameError> for State {
                         None => (),
                         Some(t) => {
                             match self.game.try_move_piece( t, &pos) {
-                                Ok(t) => (),
-                                Err(err) => panic!("{}", err)
+                                Ok(_) => (),
+                                Err(err) => println!("{}", err)
                             };
-                            self.set_available_moves();
+                            self.set_available_moves().unwrap();
                             ()
                         }
                     }
                 },
-                Some((piece, color)) => {
+                Some((_piece, color)) => {
                     let turn = self.game.get_turn();
 
                     if color == turn {
@@ -197,8 +190,11 @@ impl ggez::event::EventHandler<GameError> for State {
                                 self.selected = Some(pos);
                             },
                             Some(t) => {
-                                self.game.try_move_piece(t, &pos);
-                                self.set_available_moves();
+                                match self.game.try_move_piece( t, &pos) {
+                                    Ok(_) => (),
+                                    Err(err) => println!("{}", err)
+                                };
+                                self.set_available_moves().unwrap();
                                 ()
                             }
                         }

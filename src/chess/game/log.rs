@@ -1,7 +1,5 @@
 pub mod log {
-    use crate::chess::color::color::Color;
     use crate::chess::game::r#move::chess_move::ChessMove;
-    use crate::chess::piece::piece::Piece;
     use crate::chess::position::position::Position;
 
     #[derive(Clone)]
@@ -32,11 +30,11 @@ pub mod log {
         }
 
         pub fn piece_has_moved_from_starting_square(&self, pos: &Position) -> bool {
-            /*for (from, _, _, _) in self.log.iter() {
-            if from == *pos {
-                return true;
+            for chess_move in self.log.iter() {
+                if chess_move.from == *pos {
+                    return true;
+                }
             }
-        }*/
 
             return false;
         }

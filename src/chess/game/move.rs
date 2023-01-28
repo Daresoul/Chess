@@ -1,6 +1,5 @@
 pub mod chess_move {
     use crate::chess::color::color::Color;
-    use crate::chess::game::chess_error::chess_error::ChessError;
     use crate::chess::piece::piece::Piece;
     use crate::chess::position::position::Position;
 
@@ -16,14 +15,15 @@ pub mod chess_move {
 
     //
     // Move: a standard move
-    // EinPeasant(take position): using ein peasant, containing the position to remove the pawn.
-    // Castle
+    // EnPassant(take position): using ein peasant, containing the position to remove the pawn.
+    // Castle(rook from, rook to): holding the data of the rook movement in castling only to should be necessarry tho.
+    // Promote: Holding data about the promotion
 
     #[derive(Debug, Clone)]
     pub enum MoveType {
         Move,
         EnPassant(Position),
-        Castle,
+        Castle(Position, Position),
         Promote
     }
 

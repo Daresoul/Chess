@@ -1,6 +1,5 @@
 pub mod color {
     use std::{fmt, ops};
-    use crate::chess::piece::piece;
     use crate::chess::piece::piece::Piece;
 
     const FOURTH_BIT_BITS_MASK: u8 = 0b0000_1000;
@@ -12,6 +11,7 @@ pub mod color {
     }
 
     impl Color {
+        #[allow(dead_code)]
         pub fn from_u8(value: u8) -> Color {
             match value {
                 0 => Color::White,

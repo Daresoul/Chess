@@ -8,7 +8,6 @@ pub mod game {
     use crate::chess::color::color::Color;
     use crate::chess::game::log::log::Log;
     use crate::chess::game::chess_error::chess_error::ChessError;
-    use crate::chess::game::r#move::chess_move;
     use crate::chess::game::r#move::chess_move::{ChessMove, MoveType};
     use crate::chess::piece::piece::Piece;
     use crate::chess::position::position::Position;
@@ -130,10 +129,10 @@ pub mod game {
                     MoveType::Move => {
                         string.push_str("move: ")
                     },
-                    MoveType::EnPassant(kill_pos) => {
+                    MoveType::EnPassant(_kill_pos) => {
                         string.push_str("Ein: ")
                     },
-                    MoveType::Castle => {
+                    MoveType::Castle(_from, _to) => {
                         string.push_str("Castle: ")
                     },
                     MoveType::Promote => {
@@ -189,7 +188,7 @@ pub mod game {
             let turn = game.get_turn();
 
             match game.move_piece(&turn, chess_move) {
-                Ok(t) => (),
+                Ok(_t) => (),
                 Err(err) => println!("{}", err),
             }
 
@@ -219,7 +218,7 @@ pub mod game {
                     Ok(_) => (),
                     Err(_) => panic!("board couldnt be set."),
                 };
-                match self.board.set(chess_move.to.row, chess_move.to.column, (chess_move.piece + chess_move.color.clone())) {
+                match self.board.set(chess_move.to.row, chess_move.to.column, chess_move.piece + chess_move.color.clone()) {
                     Ok(_) => (),
                     Err(_) => panic!("board couldnt be set."),
                 };
@@ -232,7 +231,16 @@ pub mod game {
                             Err(_) => panic!("board couldnt be set."),
                         };
                     },
-                    MoveType::Castle => (),
+                    MoveType::Castle(from, to) => {
+                        match self.board.set(from.row, from.column, 0) {
+                            Ok(_) => (),
+                            Err(_) => panic!("board couldnt be set."),
+                        };
+                        match self.board.set(to.row, to.column, Piece::Rook + chess_move.color.clone()) {
+                            Ok(_) => (),
+                            Err(_) => panic!("board couldnt be set."),
+                        };
+                    },
                     MoveType::Promote => ()
                 }
 
@@ -254,10 +262,7 @@ pub mod game {
                 Some(chess_move) => {
                     if Self::is_valid_move(self.clone(), &chess_move)
                     {
-                        self.move_piece(&turn, &chess_move);
-                        /*if is_checkmate(new_game.clone()) {
-                            println!("Is checkmate")
-                        }*/
+                        self.move_piece(&turn, &chess_move).unwrap();
                         self.turn += 1;
                         return Ok(self.clone());
                     } else {
@@ -279,7 +284,7 @@ pub mod game {
             let turn = self.get_turn();
             let mut moves = vec![];
 
-            for mut chess_move in available_moves {
+            for chess_move in available_moves {
                 if turn == chess_move.color {
 
                     moves.append(&mut vec![chess_move]);
@@ -555,7 +560,79 @@ pub mod game {
 
             // castling
 
+            let king_starter_square =
+                match color {
+                    Color::White => Position::new(4, 7),
+                    Color::Black => Position::new(4, 0)
+                };
 
+            let rook_left_starter_square = match color {
+                Color::White => Position::new(0, 7),
+                Color::Black => Position::new(0, 0)
+            };
+
+            let rook_right_starter_square = match color {
+                Color::White => Position::new(7, 7),
+                Color::Black => Position::new(7, 0)
+            };
+
+            match self.get_piece_from_position(&king_starter_square) {
+                None => return moves,
+                Some(_) => ()
+            }
+
+            // TODO: optimize performance
+            if !self.log.piece_has_moved_from_starting_square(&king_starter_square) {
+                if !self.log.piece_has_moved_from_starting_square(&rook_left_starter_square) {
+
+                    let space_left_free =
+                        match color {
+                            Color::White =>
+                                if  self.get_piece_from_position(&Position::new(1, 7)) == None &&
+                                    self.get_piece_from_position(&Position::new(2, 7)) == None &&
+                                    self.get_piece_from_position(&Position::new(3, 7)) == None {
+                                        true
+                                } else {false},
+                            Color::Black =>
+                                if  self.get_piece_from_position(&Position::new(3, 0)) == None &&
+                                    self.get_piece_from_position(&Position::new(2, 0)) == None &&
+                                    self.get_piece_from_position(&Position::new(1, 0)) == None {
+                                    true
+                                } else {false}
+                        };
+
+                    if space_left_free {
+                        let to = Position::new(pos.column-2, pos.row);
+                        let rook_to = Position::new(to.column + 1, pos.row);
+                        let castle_left_move = ChessMove::new(pos.clone(), to, piece.clone(), color.clone(), None, MoveType::Castle(rook_left_starter_square, rook_to));
+                        moves.append(&mut vec![castle_left_move])
+                    }
+                }
+
+                if !self.log.piece_has_moved_from_starting_square(&rook_right_starter_square) {
+
+                    let space_right_free =
+                        match color {
+                            Color::White =>
+                                if  self.get_piece_from_position(&Position::new(5, 7)) == None &&
+                                    self.get_piece_from_position(&Position::new(6, 7)) == None {
+                                    true
+                                } else {false},
+                            Color::Black =>
+                                if  self.get_piece_from_position(&Position::new(5, 0)) == None &&
+                                    self.get_piece_from_position(&Position::new(6, 0)) == None {
+                                    true
+                                } else {false}
+                        };
+
+                    if space_right_free {
+                        let to = Position::new(pos.column + 2, pos.row);
+                        let rook_to = Position::new(to.column - 1, pos.row);
+                        let castle_left_move = ChessMove::new(pos.clone(), to, piece.clone(), color.clone(), None, MoveType::Castle(rook_right_starter_square, rook_to));
+                        moves.append(&mut vec![castle_left_move])
+                    }
+                }
+            }
 
 
             return moves;
@@ -608,7 +685,7 @@ pub mod game {
                         MoveType::Move
                     )]);
                 }
-                Some((p, c)) => ()//println!("piece: {}, color: {}, at position {}", p, c, pos.clone())
+                Some((_p, _c)) => ()//println!("piece: {}, color: {}, at position {}", p, c, pos.clone())
             }
 
             if pos.column > 0 {
