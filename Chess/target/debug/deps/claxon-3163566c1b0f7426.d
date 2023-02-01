@@ -1,0 +1,13 @@
+/Users/tomato/git/Chess/Chess/target/debug/deps/claxon-3163566c1b0f7426.rmeta: /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/lib.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/crc.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/error.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/frame.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/input.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/metadata.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/subframe.rs
+
+/Users/tomato/git/Chess/Chess/target/debug/deps/libclaxon-3163566c1b0f7426.rlib: /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/lib.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/crc.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/error.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/frame.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/input.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/metadata.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/subframe.rs
+
+/Users/tomato/git/Chess/Chess/target/debug/deps/claxon-3163566c1b0f7426.d: /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/lib.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/crc.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/error.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/frame.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/input.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/metadata.rs /Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/subframe.rs
+
+/Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/lib.rs:
+/Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/crc.rs:
+/Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/error.rs:
+/Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/frame.rs:
+/Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/input.rs:
+/Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/metadata.rs:
+/Users/tomato/.cargo/registry/src/github.com-1ecc6299db9ec823/claxon-0.4.3/src/subframe.rs:
